@@ -38,16 +38,24 @@ class ProductStore {
     });
   };
 
-  updateProduct = (updateProduct) => {
-    const product = this.products.find(
-      (product) => product.id === updateProduct.id
-    );
-    product.name = updateProduct.name;
-    product.price = updateProduct.price;
-    product.description = updateProduct.description;
-    product.image = updateProduct.image;
-    // TODO: Refactor above (Oneline?)
-    product.slug = slugify(updateProduct.name);
+  updateProduct = async (updateProduct) => {
+    try {
+      await axios.put(
+        `http://localhost:8000/products/${updateProduct.id}`,
+        updateProduct
+      );
+      const product = this.products.find(
+        (product) => product.id === updateProduct.id
+      );
+      product.name = updateProduct.name;
+      product.price = updateProduct.price;
+      product.description = updateProduct.description;
+      product.image = updateProduct.image;
+      // TODO: Refactor above (Oneline?)
+      product.slug = slugify(updateProduct.name);
+    } catch (error) {
+      console.error(error);
+    }
   };
 }
 
