@@ -30,12 +30,16 @@ class ProductStore {
     }
   };
 
-  createProduct = (newProduct) => {
-    this.products.push({
-      ...newProduct,
-      id: this.products.length + 1,
-      slug: slugify(newProduct.name),
-    });
+  createProduct = async (newProduct) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/products",
+        newProduct
+      );
+      this.products.push(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   updateProduct = async (updateProduct) => {
