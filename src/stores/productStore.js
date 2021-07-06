@@ -1,5 +1,3 @@
-//Imports
-import slugify from "react-slugify";
 //State & Store
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
@@ -32,10 +30,12 @@ class ProductStore {
 
   createProduct = async (newProduct) => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/products",
-        newProduct
-      );
+      const formData = new FormData();
+      for (const key in newProduct) {
+        formData.append(key, newProduct[key]);
+      }
+      const res = await axios.post("http://localhost:8000/products", formData);
+
       this.products.push(res.data);
     } catch (error) {
       console.error(error);
@@ -44,19 +44,20 @@ class ProductStore {
 
   updateProduct = async (updateProduct) => {
     try {
-      await axios.put(
+      const formData = new FormData();
+      for (const key in updateProduct) {
+        formData.append(key, updateProduct[key]);
+      }
+      const res = await axios.put(
         `http://localhost:8000/products/${updateProduct.id}`,
-        updateProduct
+        formData
       );
       const product = this.products.find(
         (product) => product.id === updateProduct.id
       );
-      product.name = updateProduct.name;
-      product.price = updateProduct.price;
-      product.description = updateProduct.description;
-      product.image = updateProduct.image;
-      // TODO: Refactor above (Oneline?)
-      product.slug = slugify(updateProduct.name);
+      for (const key in res.data) {
+        product[key] = res.data[key];
+      }
     } catch (error) {
       console.error(error);
     }

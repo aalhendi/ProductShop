@@ -7,19 +7,20 @@ import { useState } from "react";
 import productStore from "../stores/productStore";
 
 const ProductModal = (props) => {
-  const [product, setProduct] = useState(
-    props.oldProduct
-      ? props.oldProduct
-      : {
-          name: "",
-          price: "",
-          description: "",
-          image: "",
-        }
-  );
+  const emptyProduct = {
+    name: "",
+    price: "",
+    description: "",
+    image: "",
+  };
+  const [product, setProduct] = useState(props.oldProduct ?? emptyProduct);
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+
+  const handleImage = (e) => {
+    setProduct({ ...product, image: e.target.files[0] });
   };
 
   const handleSubmit = (e) => {
@@ -30,6 +31,7 @@ const ProductModal = (props) => {
       productStore.createProduct(product);
     }
     props.closeModal();
+    setProduct(emptyProduct);
   };
 
   return (
@@ -37,6 +39,7 @@ const ProductModal = (props) => {
       isOpen={props.isModalOpen}
       onRequestClose={props.closeModal}
       contentLabel="Example Modal"
+      ariaHideApp={false}
     >
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -79,11 +82,9 @@ const ProductModal = (props) => {
           <label>Cookie Image</label>
           <input
             className="form-control"
-            type="text"
-            placeholder="url"
-            name="image"
-            value={product.image}
-            onChange={handleChange}
+            type="file"
+            multiple={false}
+            onChange={handleImage}
           />
         </div>
 
