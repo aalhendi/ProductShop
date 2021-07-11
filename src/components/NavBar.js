@@ -18,10 +18,13 @@ const NavBar = (props) => {
             <NavProduct className="nav-link" to="/products">
               Products
             </NavProduct>
+            <NavProduct className="nav-link" to="/producers">
+              Producers
+            </NavProduct>
           </ul>
         </div>
       </div>
     </NavStyled>
   );
-}
+};
 export default NavBar;

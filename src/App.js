@@ -1,14 +1,16 @@
 // Style
 import { GlobalStyle } from "./styles";
 // Components
-import Home from "./components/Home";
-import ProductList from "./components/ProductList";
 import NavBar from "./components/NavBar.js";
-import ProductDetail from "./components/ProductDetail.js";
 //Imports
 import { ThemeProvider } from "styled-components";
+import Routes from "./components/Routes";
+
+//State & Store
 import { useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import producerStore from "./stores/producerStore";
+import productStore from "./stores/productStore";
 
 const theme = {
   light: {
@@ -34,19 +36,13 @@ function App() {
     <ThemeProvider theme={theme[currentTheme]}>
       <GlobalStyle />
       <NavBar toggleTheme={toggleTheme} currentTheme={currentTheme} />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/products/:productSlug">
-          <ProductDetail />
-        </Route>
-        <Route path="/products">
-          <ProductList />
-        </Route>
-      </Switch>
+      {productStore.loading || producerStore.loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <Routes />
+      )}
     </ThemeProvider>
   );
 }
 
-export default App;
+export default observer(App);

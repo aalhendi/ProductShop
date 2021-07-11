@@ -6,14 +6,14 @@ import Modal from "react-modal";
 import { useState } from "react";
 import productStore from "../stores/productStore";
 
-const ProductModal = (props) => {
+const ProductModal = ({ oldProduct, closeModal, isModalOpen, producer }) => {
   const emptyProduct = {
     name: "",
     price: "",
     description: "",
     image: "",
   };
-  const [product, setProduct] = useState(props.oldProduct ?? emptyProduct);
+  const [product, setProduct] = useState(oldProduct ?? emptyProduct);
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -25,20 +25,20 @@ const ProductModal = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (props.oldProduct) {
+    if (oldProduct) {
       productStore.updateProduct(product);
     } else {
-      productStore.createProduct(product);
+      productStore.createProduct(product, producer);
     }
-    props.closeModal();
+    closeModal();
     setProduct(emptyProduct);
   };
 
   return (
     <Modal
-      isOpen={props.isModalOpen}
-      onRequestClose={props.closeModal}
-      contentLabel="Example Modal"
+      isOpen={isModalOpen}
+      onRequestClose={closeModal}
+      contentLabel="Add Product Modal"
       ariaHideApp={false}
     >
       <form onSubmit={handleSubmit}>
@@ -88,7 +88,7 @@ const ProductModal = (props) => {
           />
         </div>
 
-        <SubmitButton>{props.oldProduct ? "Update" : "Add"}</SubmitButton>
+        <SubmitButton>{oldProduct ? "Update" : "Add"}</SubmitButton>
       </form>
     </Modal>
   );

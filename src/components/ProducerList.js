@@ -2,14 +2,15 @@
 import { ListWrapper } from "../styles";
 import { AddIcon } from "../styles";
 // Components
-import ProductItem from "./ProductItem";
+import ProducerItem from "./ProducerItem";
 import SearchBar from "./SearchBar";
-import ProductModal from "../modals/productModal";
+import ProducerModal from "../modals/ProducerModal";
 // State & Stores
 import { useState } from "react";
 import { observer } from "mobx-react";
+import producerStore from "../stores/producerStore";
 
-const ProductList = ({ products, producer }) => {
+const ProducerList = () => {
   const [query, setQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,22 +22,18 @@ const ProductList = ({ products, producer }) => {
     setIsModalOpen(false);
   };
 
-  const productList = products
-    .filter((product) => product.name.includes(query))
-    .map((product) => <ProductItem product={product} key={product.id} />);
+  const producerList = producerStore.producers
+    .filter((producer) => producer.name.includes(query))
+    .map((producer) => <ProducerItem producer={producer} key={producer.id} />);
 
   return (
     <>
       <SearchBar setQuery={setQuery} />
       <AddIcon size="2em" onClick={openModal} />
-      <ProductModal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        producer={producer}
-      />
-      <ListWrapper>{productList}</ListWrapper>
+      <ProducerModal isModalOpen={isModalOpen} closeModal={closeModal} />
+      <ListWrapper>{producerList}</ListWrapper>
     </>
   );
 };
 
-export default observer(ProductList);
+export default observer(ProducerList);

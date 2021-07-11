@@ -4,16 +4,19 @@ import axios from "axios";
 
 class ProductStore {
   products = [];
+  loading = true;
+
   constructor() {
     makeAutoObservable(this);
   }
 
   fetchProducts = async () => {
-    const res = await axios.get("http://localhost:8000/products");
     try {
+      const res = await axios.get("http://localhost:8000/products");
       this.products = res.data;
+      this.loading = false;
     } catch (error) {
-      console.error(error);
+      console.error("error in fetchProducts", error);
     }
   };
 
@@ -28,20 +31,25 @@ class ProductStore {
     }
   };
 
-  createProduct = async (newProduct) => {
+  createProduct = async (newProduct, producer) => {
     try {
       const formData = new FormData();
       for (const key in newProduct) {
         formData.append(key, newProduct[key]);
       }
-      const res = await axios.post("http://localhost:8000/products", formData);
+      const res = await axios.post(
+        `http://localhost:8000/producers/${producer.id}/products`,
+        formData
+      );
 
       this.products.push(res.data);
+      producer.push({ id: res.data.id });
     } catch (error) {
-      console.error(error);
+      console.error("error in createProduct: ", error);
     }
   };
 
+  // FIXME
   updateProduct = async (updateProduct) => {
     try {
       const formData = new FormData();
@@ -52,15 +60,17 @@ class ProductStore {
         `http://localhost:8000/products/${updateProduct.id}`,
         formData
       );
-      const product = this.products.find(
-        (product) => product.id === updateProduct.id
-      );
+      const product = this.getProductById(updateProduct.id);
       for (const key in res.data) {
         product[key] = res.data[key];
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  getProductById = (productId) => {
+    this.products.find((product) => product.id === productId);
   };
 }
 
