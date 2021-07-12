@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import instance from "./instance";
 
 class ProducerStore {
   producers = [];
@@ -11,7 +11,7 @@ class ProducerStore {
 
   fetchProducers = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/producers");
+      const res = await instance.get("/producers");
       this.producers = res.data;
       this.loading = false;
     } catch (error) {
@@ -25,7 +25,7 @@ class ProducerStore {
       for (const key in newProducer) {
         formData.append(key, newProducer[key]);
       }
-      const res = await axios.post("http://localhost:8000/producers", formData);
+      const res = await instance.post("/producers", formData);
       res.data.products = [];
       this.producers.push(res.data);
     } catch (error) {

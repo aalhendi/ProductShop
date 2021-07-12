@@ -1,5 +1,6 @@
 import logoImg from "../logoThing.png";
 import { ThemeButton, NavProduct, Logo, NavStyled } from "../styles.js";
+import SignupButton from "./buttons/SignupButton";
 
 const NavBar = (props) => {
   return (
@@ -21,6 +22,7 @@ const NavBar = (props) => {
             <NavProduct className="nav-link" to="/producers">
               Producers
             </NavProduct>
+            <SignupButton />
           </ul>
         </div>
       </div>
