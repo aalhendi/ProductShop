@@ -9,6 +9,7 @@ import ProducerModal from "../modals/ProducerModal";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import producerStore from "../stores/producerStore";
+import authStore from "../stores/authStore";
 
 const ProducerList = () => {
   const [query, setQuery] = useState("");
@@ -29,7 +30,7 @@ const ProducerList = () => {
   return (
     <>
       <SearchBar setQuery={setQuery} />
-      <AddIcon size="2em" onClick={openModal} />
+      {authStore.user && <AddIcon size="2em" onClick={openModal} />}
       <ProducerModal isModalOpen={isModalOpen} closeModal={closeModal} />
       <ListWrapper>{producerList}</ListWrapper>
     </>

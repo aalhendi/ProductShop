@@ -72,7 +72,7 @@ class ProductStore {
   };
 
   getProductById = (productId) => {
-    this.products.find((product) => product.id === productId);
+    return this.products.find((product) => product.id === productId);
   };
 }
 

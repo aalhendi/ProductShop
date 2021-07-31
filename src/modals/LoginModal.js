@@ -6,13 +6,10 @@ import Modal from "react-modal";
 import { useState } from "react";
 import authStore from "../stores/authStore";
 
-const SignupModal = ({ closeModal, isModalOpen }) => {
+const LoginModal = ({ closeModal, isModalOpen }) => {
   const emptyUser = {
-    firstName: "",
-    lastName: "",
     username: "",
     password: "",
-    email: "",
   };
   const [user, setUser] = useState(emptyUser);
 
@@ -22,7 +19,7 @@ const SignupModal = ({ closeModal, isModalOpen }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    authStore.createUser(user);
+    authStore.login(user);
     closeModal();
     setUser(emptyUser);
     e.target.reset();
@@ -32,7 +29,7 @@ const SignupModal = ({ closeModal, isModalOpen }) => {
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
-      contentLabel="Sign Up Modal"
+      contentLabel="Login Modal"
       ariaHideApp={false}
     >
       <form onSubmit={handleSubmit}>
@@ -60,46 +57,10 @@ const SignupModal = ({ closeModal, isModalOpen }) => {
           />
         </div>
 
-        <div className="mb-3">
-          <label>First Name</label>
-          <input
-            className="form-control"
-            type="text"
-            placeholder="First Name"
-            name="firstName"
-            value={user.firstName}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Last Name</label>
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Last Name"
-            name="lastName"
-            value={user.lastName}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Email</label>
-          <input
-            className="form-control"
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <SubmitButton>Register</SubmitButton>
+        <SubmitButton>Login</SubmitButton>
       </form>
     </Modal>
   );
 };
 
-export default SignupModal;
+export default LoginModal;

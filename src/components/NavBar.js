@@ -1,6 +1,10 @@
 import logoImg from "../logoThing.png";
 import { ThemeButton, NavProduct, Logo, NavStyled } from "../styles.js";
 import SignupButton from "./buttons/SignupButton";
+import LoginButton from "./buttons/LoginButton";
+//State and store
+import authStore from "../stores/authStore";
+import { observer } from "mobx-react-lite";
 
 const NavBar = (props) => {
   return (
@@ -22,11 +26,18 @@ const NavBar = (props) => {
             <NavProduct className="nav-link" to="/producers">
               Producers
             </NavProduct>
-            <SignupButton />
+            {authStore.user ? (
+              <h3>Hello {authStore.user.username}</h3>
+            ) : (
+              <>
+                <SignupButton />
+                <LoginButton />
+              </>
+            )}
           </ul>
         </div>
       </div>
     </NavStyled>
   );
 };
-export default NavBar;
+export default observer(NavBar);

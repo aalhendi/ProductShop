@@ -8,6 +8,7 @@ import ProductModal from "../modals/productModal";
 // State & Stores
 import { useState } from "react";
 import { observer } from "mobx-react";
+import authStore from "../stores/authStore";
 
 const ProductList = ({ products, producer }) => {
   const [query, setQuery] = useState("");
@@ -28,7 +29,7 @@ const ProductList = ({ products, producer }) => {
   return (
     <>
       <SearchBar setQuery={setQuery} />
-      <AddIcon size="2em" onClick={openModal} />
+      {authStore.user && <AddIcon size="2em" onClick={openModal} />}
       <ProductModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
